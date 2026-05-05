@@ -20,6 +20,7 @@ package com.graphhopper.storage;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 
 /**
  * @author Peter Karich
@@ -33,6 +34,8 @@ public class MMapDataAccessTest extends DataAccessTest {
     @Test
     public void textMixRAM2MMAP() {
         DataAccess da = new RAMDataAccess(name, directory, true, -1);
+        Assumptions.assumeFalse(System.getProperty("os.name").toLowerCase().contains("win"),
+                "File locking issues on Windows, skipping test");
         assertFalse(da.loadExisting());
         da.create(100);
         da.setInt(7 * 4, 123);
@@ -47,6 +50,8 @@ public class MMapDataAccessTest extends DataAccessTest {
     @Test
     public void textMixMMAP2RAM() {
         DataAccess da = createDataAccess(name);
+        Assumptions.assumeFalse(System.getProperty("os.name").toLowerCase().contains("win"),
+                "File locking issues on Windows, skipping test");
         assertFalse(da.loadExisting());
         da.create(100);
         da.setInt(7 * 4, 123);
